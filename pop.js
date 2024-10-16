@@ -12,6 +12,16 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   
+    // Add task button listener
+    addTaskBtn.addEventListener('click', function() {
+      const task = taskInput.value.trim();
+      if (task) {
+        addTaskToList(task);
+        saveTask(task);
+        taskInput.value = ''; // Clear input
+      }
+    });
+  
     // Save the task to Chrome storage
     function saveTask(task) {
       chrome.storage.sync.get(['tasks'], function(result) {
@@ -20,7 +30,20 @@ document.addEventListener('DOMContentLoaded', function() {
         chrome.storage.sync.set({ tasks: tasks });
       });
     }
-
+  
+    // Add task to the HTML list
+    function addTaskToList(task) {
+      const li = document.createElement('li');
+      li.textContent = task;
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'X';
+      deleteBtn.addEventListener('click', function() {
+        taskList.removeChild(li);
+        removeTask(task);
+      });
+      li.appendChild(deleteBtn);
+      taskList.appendChild(li);
+    }
   
     // Remove task from Chrome storage
     function removeTask(task) {
