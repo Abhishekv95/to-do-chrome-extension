@@ -3,13 +3,80 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <title>To-Do List</title>
+  <title>Enhanced To-Do List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .dark {
+      background-color: #121212;
+      color: #ffffff;
+    }
+    h1 {
+      text-align: center;
+    }
+    input, select, button {
+      display: block;
+      margin: 5px auto;
+      padding: 8px;
+      width: 80%;
+      max-width: 300px;
+    }
+    #taskList {
+      list-style-type: none;
+      padding: 0;
+    }
+    .task {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px;
+      margin: 5px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .task .task-text {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+    button {
+      background-color: #ff4d4d;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #ff1a1a;
+    }
+    .high {
+      background-color: #ffcccc;
+    }
+    .medium {
+      background-color: #ffe6cc;
+    }
+    .low {
+      background-color: #d5e8d4;
+    }
+  </style>
 </head>
 <body>
   <h1>To-Do List</h1>
   <input type="text" id="taskInput" placeholder="New Task">
+  <select id="categoryInput">
+    <option value="Work">Work</option>
+    <option value="Personal">Personal</option>
+    <option value="Shopping">Shopping</option>
+  </select>
+  <select id="priorityInput">
+    <option value="High">High</option>
+    <option value="Medium">Medium</option>
+    <option value="Low">Low</option>
+  </select>
+  <input type="date" id="dueDateInput">
   <button id="addTaskBtn">Add Task</button>
+  <label>
+    <input type="checkbox" id="darkModeToggle"> Dark Mode
+  </label>
   <ul id="taskList"></ul>
 
   <script src="popup.js"></script>
