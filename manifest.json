@@ -1,13 +1,10 @@
 {
-    "manifest_version": 3,
-    "name": "To-Do List",
-    "description": "A simple to-do list extension for Google Chrome",
-    "version": "1.0",
-    "action": {
-      "default_popup": "popup.html"
-    },
-    "permissions": [
-      "storage"
-    ]
-  }
-  
+  "manifest_version": 3,
+  "name": "Enhanced To-Do List",
+  "description": "A feature-rich to-do list extension for Google Chrome",
+  "version": "2.0",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": ["storage", "notifications", "alarms"]
+}
