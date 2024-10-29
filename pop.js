@@ -10,9 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Load saved tasks and dark mode setting
     chrome.storage.sync.get(['tasks', 'darkMode'], function (result) {
         if (result.tasks) {
-            result.tasks.forEach(task => {
-                addTaskToList(task);
-            });
+            result.tasks.sort(sortTasks).forEach(task => addTaskToList(task));
         }
         if (result.darkMode) {
             document.body.classList.add('dark');
@@ -26,12 +24,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const priority = priorityInput.value;
         const dueDate = dueDateInput.value;
 
-        if (task) {
+        if (task && category && priority && dueDate) {
             const taskObj = { task, category, priority, dueDate, done: false };
             addTaskToList(taskObj);
             saveTask(taskObj);
-            taskInput.value = ''; // Clear input
-            dueDateInput.value = ''; // Clear date input
+            clearForm();
+        } else {
+            alert("Please fill in all task details!");
         }
     });
 
@@ -44,15 +43,23 @@ document.addEventListener('DOMContentLoaded', function () {
         chrome.storage.sync.get(['tasks'], function (result) {
             const tasks = result.tasks || [];
             tasks.push(taskObj);
-            chrome.storage.sync.set({ tasks: tasks });
+            tasks.sort(sortTasks);
+            chrome.storage.sync.set({ tasks });
         });
     }
 
     function addTaskToList(taskObj) {
         const li = document.createElement('li');
         li.className = `task ${taskObj.priority.toLowerCase()}`;
-        li.innerHTML = `<span class="task-text">${taskObj.task} (${taskObj.category}) - Due: ${taskObj.dueDate}</span>`;
         
+        // Due date color coding
+        const daysRemaining = calculateDaysRemaining(taskObj.dueDate);
+        if (daysRemaining <= 2) li.classList.add('due-soon');
+
+        li.innerHTML = `
+            <span class="task-text">${taskObj.task} (${taskObj.category}) - Due: ${taskObj.dueDate}</span>
+        `;
+
         const doneCheckbox = document.createElement('input');
         doneCheckbox.type = 'checkbox';
         doneCheckbox.checked = taskObj.done;
@@ -75,17 +82,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateTask(updatedTask) {
         chrome.storage.sync.get(['tasks'], function (result) {
-            const tasks = result.tasks.map(task => 
+            const tasks = result.tasks.map(task =>
                 task.task === updatedTask.task ? updatedTask : task
             );
-            chrome.storage.sync.set({ tasks: tasks });
+            chrome.storage.sync.set({ tasks });
         });
     }
 
     function removeTask(taskName) {
         chrome.storage.sync.get(['tasks'], function (result) {
             const tasks = result.tasks.filter(task => task.task !== taskName);
-            chrome.storage.sync.set({ tasks: tasks });
+            chrome.storage.sync.set({ tasks });
         });
+    }
+
+    function clearForm() {
+        taskInput.value = '';
+        categoryInput.value = '';
+        priorityInput.value = '';
+        dueDateInput.value = '';
+    }
+
+    function sortTasks(a, b) {
+        const priorityOrder = { high: 1, medium: 2, low: 3 };
+        if (priorityOrder[a.priority] === priorityOrder[b.priority]) {
+            return new Date(a.dueDate) - new Date(b.dueDate);
+        }
+        return priorityOrder[a.priority] - priorityOrder[b.priority];
+    }
+
+    function calculateDaysRemaining(dueDate) {
+        const currentDate = new Date();
+        const targetDate = new Date(dueDate);
+        return Math.floor((targetDate - currentDate) / (1000 * 60 * 60 * 24));
     }
 });
