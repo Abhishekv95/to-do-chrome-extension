@@ -7,78 +7,148 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      transition: background-color 0.3s, color 0.3s;
     }
-    .dark {
-      background-color: #121212;
-      color: #ffffff;
+    .container {
+      width: 100%;
+      max-width: 500px;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: white;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     }
     h1 {
       text-align: center;
+      color: #4a4a8a;
+      margin-bottom: 20px;
     }
     input, select, button {
       display: block;
-      margin: 5px auto;
-      padding: 8px;
-      width: 80%;
-      max-width: 300px;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
     }
-    #taskList {
+    input[type="text"], input[type="date"] {
+      font-family: inherit;
+    }
+    button {
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #357ab8;
+    }
+    .task-list {
       list-style-type: none;
       padding: 0;
+      margin-top: 20px;
     }
     .task {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 5px;
-      margin: 5px 0;
-      border-bottom: 1px solid #ddd;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      background-color: #f3f3f3;
+      box-sizing: border-box;
     }
     .task .task-text {
       flex-grow: 1;
       margin-right: 10px;
+      font-size: 16px;
     }
-    button {
-      background-color: #ff4d4d;
-      border: none;
-      color: white;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #ff1a1a;
-    }
-    .high {
+    .priority-high {
       background-color: #ffcccc;
     }
-    .medium {
+    .priority-medium {
       background-color: #ffe6cc;
     }
-    .low {
+    .priority-low {
       background-color: #d5e8d4;
+    }
+    label {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .dark-toggle {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .dark-toggle input[type="checkbox"] {
+      margin-right: 10px;
+      accent-color: #4a90e2;
+      transform: scale(1.3);
     }
   </style>
 </head>
 <body>
-  <h1>To-Do List</h1>
-  <input type="text" id="taskInput" placeholder="New Task">
-  <select id="categoryInput">
-    <option value="Work">Work</option>
-    <option value="Personal">Personal</option>
-    <option value="Shopping">Shopping</option>
-  </select>
-  <select id="priorityInput">
-    <option value="High">High</option>
-    <option value="Medium">Medium</option>
-    <option value="Low">Low</option>
-  </select>
-  <input type="date" id="dueDateInput">
-  <button id="addTaskBtn">Add Task</button>
-  <label>
-    <input type="checkbox" id="darkModeToggle"> Dark Mode
-  </label>
-  <ul id="taskList"></ul>
-
-  <script src="popup.js"></script>
+  <div class="container">
+    <h1>Enhanced To-Do List</h1>
+    <input type="text" id="taskInput" placeholder="Enter a new task">
+    <select id="categoryInput" aria-label="Category">
+      <option value="" disabled selected>Select Category</option>
+      <option value="Work">Work</option>
+      <option value="Personal">Personal</option>
+      <option value="Shopping">Shopping</option>
+    </select>
+    <select id="priorityInput" aria-label="Priority">
+      <option value="" disabled selected>Select Priority</option>
+      <option value="High">High</option>
+      <option value="Medium">Medium</option>
+      <option value="Low">Low</option>
+    </select>
+    <input type="date" id="dueDateInput" aria-label="Due Date">
+    <button id="addTaskBtn">Add Task</button>
+    <div class="dark-toggle">
+      <label for="darkModeToggle">
+        <input type="checkbox" id="darkModeToggle"> Enable Dark Mode
+      </label>
+    </div>
+    <ul class="task-list" id="taskList">
+      <li class="task priority-high">
+        <span class="task-text">Sample Task - <em>Work</em> - <small>Due: 2024-11-01</small></span>
+        <span class="task-actions">
+          <button aria-label="Edit Task">✎</button>
+          <button aria-label="Delete Task">🗑️</button>
+        </span>
+      </li>
+      <li class="task priority-medium">
+        <span class="task-text">Sample Task - <em>Personal</em> - <small>Due: 2024-11-02</small></span>
+        <span class="task-actions">
+          <button aria-label="Edit Task">✎</button>
+          <button aria-label="Delete Task">🗑️</button>
+        </span>
+      </li>
+      <li class="task priority-low">
+        <span class="task-text">Sample Task - <em>Shopping</em> - <small>Due: 2024-11-03</small></span>
+        <span class="task-actions">
+          <button aria-label="Edit Task">✎</button>
+          <button aria-label="Delete Task">🗑️</button>
+        </span>
+      </li>
+    </ul>
+  </div>
 </body>
 </html>
