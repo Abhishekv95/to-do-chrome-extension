@@ -1,17 +1,42 @@
 {
   "manifest_version": 3,
   "name": "Advanced To-Do List",
-  "description": "A to-do list with Google Sheets sync",
+  "description": "An advanced to-do list extension with task priorities, categories, dark mode, and Google Sheets sync.",
   "version": "3.0",
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
   },
-  "permissions": ["storage", "identity"],
+  "permissions": [
+    "storage",
+    "identity"
+  ],
   "oauth2": {
     "client_id": "YOUR_GOOGLE_CLIENT_ID",
     "scopes": [
       "https://www.googleapis.com/auth/spreadsheets",
       "https://www.googleapis.com/auth/drive.file"
     ]
-  }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "host_permissions": [
+    "https://*.googleapis.com/"
+  ],
+  "options_page": "options.html",
+  "short_name": "To-Do List",
+  "author": "Your Name"
 }
