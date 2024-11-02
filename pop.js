@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const taskList = document.getElementById('taskList');
     const darkModeToggle = document.getElementById('darkModeToggle');
 
-    // Load saved tasks and dark mode setting
+    // Load saved tasks and apply sorting & dark mode
     chrome.storage.sync.get(['tasks', 'darkMode'], function (result) {
         if (result.tasks) {
-            result.tasks.sort(sortTasks).forEach(task => addTaskToList(task));
+            result.tasks.sort(sortTasks).forEach(task => addTaskToList(task)); // Apply sorting function
         }
         if (result.darkMode) {
             document.body.classList.add('dark');
@@ -24,11 +24,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const priority = priorityInput.value;
         const dueDate = dueDateInput.value;
 
+        // Validate that all fields are filled
         if (task && category && priority && dueDate) {
             const taskObj = { task, category, priority, dueDate, done: false };
             addTaskToList(taskObj);
             saveTask(taskObj);
-            clearForm();
+            clearForm();  // Clear form after adding task
         } else {
             alert("Please fill in all task details!");
         }
@@ -43,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
         chrome.storage.sync.get(['tasks'], function (result) {
             const tasks = result.tasks || [];
             tasks.push(taskObj);
-            tasks.sort(sortTasks);
+            tasks.sort(sortTasks);  // Re-sort tasks after adding a new one
             chrome.storage.sync.set({ tasks });
         });
     }
@@ -51,10 +52,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function addTaskToList(taskObj) {
         const li = document.createElement('li');
         li.className = `task ${taskObj.priority.toLowerCase()}`;
-        
-        // Due date color coding
+
+        // Color-coding based on due date
         const daysRemaining = calculateDaysRemaining(taskObj.dueDate);
-        if (daysRemaining <= 2) li.classList.add('due-soon');
+        if (daysRemaining <= 2) li.classList.add('due-soon'); // Add 'due-soon' class if due in 2 days or less
 
         li.innerHTML = `
             <span class="task-text">${taskObj.task} (${taskObj.category}) - Due: ${taskObj.dueDate}</span>
@@ -103,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
         dueDateInput.value = '';
     }
 
+    // Sorting function based on priority and due date
     function sortTasks(a, b) {
         const priorityOrder = { high: 1, medium: 2, low: 3 };
         if (priorityOrder[a.priority] === priorityOrder[b.priority]) {
@@ -111,6 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return priorityOrder[a.priority] - priorityOrder[b.priority];
     }
 
+    // Calculates days remaining until the task's due date
     function calculateDaysRemaining(dueDate) {
         const currentDate = new Date();
         const targetDate = new Date(dueDate);
